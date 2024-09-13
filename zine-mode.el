@@ -106,7 +106,7 @@
 
    :feature 'attributes
    :language 'superhtml
-   '((attribute_name) @font-lock-attribute-face)
+   '((attribute_name) @font-lock-function-call-face)
 
    :feature 'doctype
    :language 'superhtml
@@ -127,7 +127,7 @@
       (element
        (start_tag
         (attribute
-         (attribute_name) @font-lock-attribute-face
+         (attribute_name) @font-lock-keyword-face
          [
           (attribute_value) @font-lock-doc-markup-face
           (quoted_attribute_value (attribute_value) @font-lock-doc-markup-face)
@@ -136,7 +136,7 @@
         (start_tag
          (tag_name) @font-lock-function-call-face)))
       (:equal @font-lock-function-call-face "super")
-      (:equal @font-lock-attribute-face "id")
+      (:equal @font-lock-keyword-face "id")
       ))
 
    :feature 'super-errors
@@ -146,7 +146,7 @@
        (start_tag
         (tag_name) @font-lock-builtin-face
         (attribute
-         (attribute_name) @font-lock-warning-face):+))
+         (attribute_name) @font-lock-warning-face) :+))
       (:equal @font-lock-builtin-face "super")
       ))
 
