@@ -130,7 +130,7 @@
          (attribute_name) @font-lock-attribute-face
          [
           (attribute_value) @font-lock-doc-markup-face
-          (quoted_attribute_vale (attribute_value) @font-lock-doc-markup-face)
+          (quoted_attribute_value (attribute_value) @font-lock-doc-markup-face)
           ]))
        (element
         (start_tag
