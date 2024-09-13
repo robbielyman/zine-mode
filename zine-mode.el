@@ -133,7 +133,7 @@
       (:eq @font-lock-attribute-face "id")
       ))
 
-   :feature super-errors
+   :feature 'super-errors
    :language 'superhtml
    '((
       (element
