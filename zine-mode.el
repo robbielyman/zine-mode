@@ -86,7 +86,7 @@
 
    :embed 'css
    :host 'superhtml
-   '((script_element (raw_text) @capture))
+   '((style_element (raw_text) @capture))
    ))
 
 (defvar zine-superhtml--treesit-font-lock-setting
