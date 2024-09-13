@@ -35,7 +35,6 @@
 
 (require 'treesit)
 (require 'reformatter)
-(require 'css-mode)
 
 (defgroup zine-mode nil
   "Tree-sitter powered support for Zine static site code."
@@ -181,7 +180,6 @@
                   (string attributes)
                   (links)
                   (bracket delimiter)))
-    (setq-local treesit-font-lock-settings css--treesit-settings)
     (setq-local treesit-font-lock-settings zine-superhtml--treesit-font-lock-setting)
     (setq-local treesit-range-settings zine-superhtml--treesit-range-settings)
     (treesit-major-mode-setup)))
