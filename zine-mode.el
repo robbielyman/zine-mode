@@ -71,6 +71,12 @@
 ;;;###autoload (autoload 'zine-superhtml-format-region "current-file" nil t)
 ;;;###autoload (autoload 'zine-superhtml-format-on-save-mode "current-file" nil t)
 
+(defun zine-superhtml--treesit-property-super-extend-p (node)
+  "Check that NODE has text equal to \"super\" or \"extend\""
+  (or (equal (treesit-node-text node) "super")
+      (equal (treesit-node-text node) "extend"))
+  )
+
 (defvar zine-superhtml--treesit-font-lock-setting
   (treesit-font-lock-rules
    :feature 'comment
@@ -109,7 +115,7 @@
    :feature 'special
    :language 'superhtml
    '(((tag_name) @font-lock-builtin-face
-      (:any-of @font-lock-builtin-face "super" "extend")))
+      (:pred zine-superhtml--treesit-property-super-extend-p @font-lock-builtin-face)))
 
    :feature 'parse-error
    :language 'superhtml
@@ -129,8 +135,8 @@
        (element
         (start_tag
          (tag_name) @font-lock-function-call-face)))
-      (:eq @font-lock-function-call-face "super")
-      (:eq @font-lock-attribute-face "id")
+      (:equal @font-lock-function-call-face "super")
+      (:equal @font-lock-attribute-face "id")
       ))
 
    :feature 'super-errors
@@ -141,7 +147,7 @@
         (tag_name) @font-lock-builtin-face
         (attribute
          (attribute_name) @font-lock-warning-face):+))
-      (:eq @font-lock-builtin-face "super")
+      (:equal @font-lock-builtin-face "super")
       ))
 
    :feature 'tag
