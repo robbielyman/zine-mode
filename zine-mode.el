@@ -77,6 +77,17 @@
       (equal (treesit-node-text node) "extend"))
   )
 
+(defvar zine-superhtml--treesit-range-settings
+  (treesit-range-rules
+   :embed 'javascript
+   :host 'superhtml
+   '((script_element (raw_text) @capture))
+
+   :embed 'css
+   :host 'superhtml
+   '((script_element (raw_text) @capture))
+   ))
+
 (defvar zine-superhtml--treesit-font-lock-setting
   (treesit-font-lock-rules
    :feature 'comment
@@ -170,6 +181,7 @@
                   (links)
                   (bracket delimiter)))
     (setq-local treesit-font-lock-settings zine-superhtml--treesit-font-lock-setting)
+    (setq-local treesit-range-settings zine-superhtml--treesit-range-settings)
     (treesit-major-mode-setup)))
 
 ;;;###autoload
