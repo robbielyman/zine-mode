@@ -35,7 +35,7 @@
 
 (require 'treesit)
 (require 'reformatter)
-(require 'css)
+(require 'css-mode)
 
 (defgroup zine-mode nil
   "Tree-sitter powered support for Zine static site code."
