@@ -1,0 +1,23 @@
+* zine-mode.el
+
+a simple tree-sitter major mode for the Zine static site generator and Emacs >=29.
+
+to use with =straight.el= and =straight-use-package=, add the following to your configuration:
+
+#+begin_src emacs-lisp
+  (use-package zine-mode
+    :straight (zine-mode
+               :type git
+               :host github
+               :repo "robbielyman/zine-mode"
+               :branch "main"))
+#+end_src
+
+to use the =superhtml= LSP with =eglot=, add the following to your configuration:
+
+#+begin_src emacs-lisp
+  (add-to-list 'eglot-server-programs
+               '((zine-mode :language-id "superhtml") "superhtml" "lsp"))
+#+end_src
+
+NB: this assumes that =superhtml= is on your PATH.
