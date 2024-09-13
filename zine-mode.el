@@ -71,7 +71,7 @@
 ;;;###autoload (autoload 'zine-superhtml-format-region "current-file" nil t)
 ;;;###autoload (autoload 'zine-superhtml-format-on-save-mode "current-file" nil t)
 
-(defvar zine-suprehtml--treesit-font-lock-setting
+(defvar zine-superhtml--treesit-font-lock-setting
   (treesit-font-lock-rules
    :feature 'comment
    :language 'superhtml
