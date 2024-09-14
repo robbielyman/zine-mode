@@ -71,6 +71,13 @@
 ;;;###autoload (autoload 'zine-superhtml-format-region "current-file" nil t)
 ;;;###autoload (autoload 'zine-superhtml-format-on-save-mode "current-file" nil t)
 
+(defconst zine-mode-superhtml-syntax-table
+  (let ((table (make-syntax-table)))
+
+    (modify-syntax-entry ?< "(>" table)
+    (modify-syntax-entry ?> ")<" table)
+    table))
+
 (defun zine-superhtml--treesit-property-super-extend-p (node)
   "Check that NODE has text equal to \"super\" or \"extend\""
   (or (equal (treesit-node-text node) "super")
@@ -168,9 +175,10 @@
   "Tree-sitter font-lock settings for superhtml.")
 
 ;;;###autoload
-(define-derived-mode zine-mode prog-mode "Zine"
+(define-derived-mode zine-mode text-mode "Zine"
   "A tree-sitter-powered major mode for the Zine static site generator."
   :group 'zine-mode
+  :syntax-table zine-mode-superhtml-syntax-table
   (when zine-superhtml-format-on-save
     (zine-superhtml-format-on-save-mode 1))
   (when (treesit-ready-p 'superhtml)
