@@ -35,6 +35,8 @@
 
 (require 'treesit)
 (require 'reformatter)
+(require 'css-mode)
+(require 'js)
 
 (defgroup zine-mode nil
   "Tree-sitter powered support for Zine static site code."
@@ -183,12 +185,13 @@
     (zine-superhtml-format-on-save-mode 1))
   (when (treesit-ready-p 'superhtml)
     (treesit-parser-create 'superhtml)
+    (setq-local font-lock-fontify-region-function #'css--fontify-region)
     (setq-local treesit-font-lock-feature-list
-                '((comment doctype tag special parse-error super-errors)
-                  (string attributes)
-                  (links)
+                '((comment doctype tag special parse-error super-errors function error)
+                  (string attributes keyword definition)
+                  (links variable operator selector property constant query string-interpolation assignment jsx number escape-sequence)
                   (bracket delimiter)))
-    (setq-local treesit-font-lock-settings zine-superhtml--treesit-font-lock-setting)
+    (setq-local treesit-font-lock-settings (append zine-superhtml--treesit-font-lock-setting css--treesit-settings)) ; js--treesit-font-lock-settings))
     (setq-local treesit-range-settings zine-superhtml--treesit-range-settings)
     (treesit-major-mode-setup)))
 
