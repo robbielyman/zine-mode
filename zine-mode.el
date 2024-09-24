@@ -150,7 +150,7 @@
 
    :embed 'ziggy
    :host 'supermd
-   '((document . (section . (thematic_break) (_) @capture (thematic_break)))
+   '((document . (section . ((thematic_break) (_) @capture (thematic_break))))
      ((minus_metadata) @capture))
 
    :embed 'supermd_inline
