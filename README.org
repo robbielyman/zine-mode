@@ -17,7 +17,7 @@ to use the =superhtml= LSP with =eglot=, add the following to your configuration
 
 #+begin_src emacs-lisp
   (add-to-list 'eglot-server-programs
-               '((zine-mode :language-id "superhtml") "superhtml" "lsp"))
+               '((zine-superhtml-mode :language-id "superhtml") "superhtml" "lsp"))
 #+end_src
 
 NB: this assumes that =superhtml= is on your PATH.
