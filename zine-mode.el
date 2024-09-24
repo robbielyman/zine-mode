@@ -75,17 +75,6 @@
 ;;;###autoload (autoload 'zine-superhtml-format-region "current-file" nil t)
 ;;;###autoload (autoload 'zine-superhtml-format-on-save-mode "current-file" nil t)
 
-(defvar zine-supermd-inline--tresit-range-settings
-  (treesit-range-rules
-   :embed 'html
-   :host 'supermd-inline
-   '((html_tag) @capture)
-
-   :embed 'latex
-   :host 'supermd-inline
-   '((latex_block) @capture))
-  "Tree-sitter injections for supermd-inline.")
-
 (defvar zine-supermd-inline--treesit-font-lock-setting
   (treesit-font-lock-rules
    :feature 'verbatim
@@ -144,16 +133,12 @@
 
 (defvar zine-supermd--treesit-range-settings
   (treesit-range-rules
-   :embed 'html
-   :host 'supermd
-   '((html_block) @capture)
-
    :embed 'ziggy
    :host 'supermd
-   '((document . (section . ((thematic_break) (_) @capture (thematic_break))))
+   '((document . ((section . ((thematic_break) (_) @capture (thematic_break)))))
      ((minus_metadata) @capture))
 
-   :embed 'supermd_inline
+   :embed 'supermd-inline
    :host 'supermd
    '((inline) @capture))
   "Tree-sitter injections for supermd.")
@@ -358,16 +343,14 @@
     (treesit-parser-create 'supermd)
     (treesit-parser-create 'supermd-inline)
     (setq-local treesit-font-lock-feature-list
-                '((url comment doctype tag special parse-error function error)
-                  (code-block link-title reference verbatim)
-                  (strong emphasis escape)
-                  (link-delimiter delimiter title-punctuation list-punctuation)))
+                '((url comment doctype tag special parse-error function error top-comment)
+                  (code-block link-title reference verbatim string keyword type)
+                  (strong emphasis escape null boolean numeic)
+                  (link-delimiter delimiter title-punctuation list-punctuation bracket)))
     (setq-local treesit-font-lock-settings (append zine-supermd--treesit-font-lock-setting
-                                                   zine-supermd-inline--treesit-font-lock-setting
-                                                   ziggy--treesit-font-lock-setting
-                                                   latex--treesit-font-lock-setting))
-    (setq-local treesit-range-settings (append zine-supermd--treesit-range-settings
-                                               zine-supermd-inline--treesit-range-settings))
+                                                  zine-supermd-inline--treesit-font-lock-setting
+                                                  ziggy--treesit-font-lock-setting))
+    (setq-local treesit-range-settings zine-supermd--treesit-range-settings)
     (treesit-major-mode-setup)))
 
 ;;;###autoload
