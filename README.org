@@ -2,6 +2,8 @@
 
 a simple tree-sitter major mode for the Zine static site generator and Emacs >=29.
 
+to automatically start zine-mode when opening =.shtml= files, add =(zine-override-auto-mode)= to your configuration
+
 to use with =straight.el= and =straight-use-package=, add the following to your configuration:
 
 #+begin_src emacs-lisp
@@ -9,7 +11,7 @@ to use with =straight.el= and =straight-use-package=, add the following to your 
     :straight (zine-mode
                :type git
                :host github
-               :repo "robbielyman/zine-mode"
+               :repo "dcolazin/zine-mode"
                :branch "main"))
 #+end_src
 

@@ -1,10 +1,10 @@
-;;; zine-mode.el --- major mode for zine, the static site generator -*- lexical-binding: t; -*-
+;;; zine-mode.el --- Major mode for zine, the static site generator -*- lexical-binding: t; -*-
 
 ;; Author: 2024 Robbie Lyman <rb.lymn@gmail.com>
-;;
-;; URL: https://github.com/robbielyman/zine-mode
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "29.0"))
+;; Maintainer: Davide Colazingari <dcolazin@gmail.com>
+;; URL: https://github.com/dcolazin/zine-mode
+;; Version: 0.0.2
+;; Package-Requires: ((emacs "29.1") (reformatter "0.6") (markdown-mode "2.8-alpha") (ziggy-mode "0.0.2"))
 ;;
 ;; This file is NOT part of Emacs.
 ;;
@@ -40,7 +40,7 @@
 (require 'markdown-mode)
 (require 'ziggy-mode)
 
-(defgroup zine-mode nil
+(defgroup zine nil
   "Tree-sitter powered support for Zine static site code."
   :link '(url-link "https://zine-ssg.io")
   :group 'languages)
@@ -49,26 +49,26 @@
   "Format buffers before saving using superhtml fmt."
   :type 'boolean
   :safe #'booleanp
-  :group 'zine-mode)
+  :group 'zine)
 
 (defcustom zine-superhtml-format-show-buffer t
   "Show a *superhtml-fmt* buffer after superhtml fmt completes with errors."
   :type 'boolean
   :safe #'booleanp
-  :group 'zine-mode)
+  :group 'zine)
 
 (defcustom zine-superhtml-bin "superhtml"
   "Path to superhtml executable."
   :type 'file
   :safe #'stringp
-  :group 'zine-mode)
+  :group 'zine)
 
 ;; superhtml fmt
 
 (reformatter-define zine-superhtml-format
   :program zine-superhtml-bin
   :args '("fmt" "--stdin")
-  :group 'zine-mode
+  :group 'zine
   :lighter " ZineSuperHTMLFmt")
 
 ;;;###autoload (autoload 'zine-superhtml-format-buffer "current-file" nil t)
@@ -126,9 +126,7 @@
    '(
      (image ["!" "[" "]" "(" ")"] @font-lock-delimiter-face)
      (inline_link ["[" "]" "(" ")"] @font-lock-delimiter-face)
-     (shortcut_link ["[" "]"] @font-lock-delimiter-face)
-     )
-   )
+     (shortcut_link ["[" "]"] @font-lock-delimiter-face)))
   "Tree-sitter font-lock settings for supermd-inline.")
 
 (defvar zine-supermd--treesit-range-settings
@@ -205,8 +203,7 @@
 
    :feature 'escape
    :language 'supermd
-   '((backslash_escape) @font-lock-escape-face)
-   )
+   '((backslash_escape) @font-lock-escape-face))
   "Tree-sitter font-lock settings for supermd.")
 
 (defconst zine-mode-superhtml-syntax-table
@@ -219,8 +216,7 @@
 (defun zine-superhtml--treesit-property-super-extend-p (node)
   "Check that NODE has text equal to \"super\" or \"extend\"."
   (or (equal (treesit-node-text node) "super")
-      (equal (treesit-node-text node) "extend"))
-  )
+      (equal (treesit-node-text node) "extend")))
 
 (defvar zine-superhtml--treesit-range-settings
   (treesit-range-rules
@@ -230,8 +226,7 @@
 
    :embed 'css
    :host 'superhtml
-   '((style_element (raw_text) @capture))
-   )
+   '((style_element (raw_text) @capture)))
   "Tree-sitter injections for superhtml.")
 
 (defvar zine-superhtml--treesit-font-lock-setting
@@ -293,8 +288,7 @@
         (start_tag
          (tag_name) @font-lock-function-call-face)))
       (:equal @font-lock-function-call-face "super")
-      (:equal @font-lock-keyword-face "id")
-      ))
+      (:equal @font-lock-keyword-face "id")))
 
    :feature 'super-errors
    :language 'superhtml
@@ -304,19 +298,17 @@
         (tag_name) @font-lock-builtin-face
         (attribute
          (attribute_name) @font-lock-warning-face) :+))
-      (:equal @font-lock-builtin-face "super")
-      ))
+      (:equal @font-lock-builtin-face "super")))
 
    :feature 'tag
    :language 'superhtml
-   '((tag_name) @font-lock-function-call-face)
-   )
+   '((tag_name) @font-lock-function-call-face))
   "Tree-sitter font-lock settings for superhtml.")
 
 ;;;###autoload
 (define-derived-mode zine-superhtml-mode text-mode "Zine"
   "A tree-sitter-powered major mode for the Zine static site generator."
-  :group 'zine-mode
+  :group 'zine
   :syntax-table zine-mode-superhtml-syntax-table
   (when zine-superhtml-format-on-save
     (zine-superhtml-format-on-save-mode 1))
@@ -328,16 +320,15 @@
                   (string attributes keyword definition)
                   (links variable operator selector property constant query string-interpolation assignment jsx number escape-sequence)
                   (bracket delimiter)))
-    (setq-local treesit-font-lock-settings (append zine-superhtml--treesit-font-lock-setting
-                                                   css--treesit-settings
-                                                   js--treesit-font-lock-settings))
-    (setq-local treesit-range-settings zine-superhtml--treesit-range-settings)
+     (setq-local treesit-font-lock-settings (append zine-superhtml--treesit-font-lock-setting
+                                                    css--treesit-settings
+                                                    (js--treesit-font-lock-settings)))
     (treesit-major-mode-setup)))
 
 ;;;###autoload
 (define-derived-mode zine-supermd-mode text-mode "Zine"
   "A tree-sitter-powered major mode for the Zine static site generator."
-  :group 'zine-mode
+  :group 'zine
   (when (and (treesit-ready-p 'supermd)
              (treesit-ready-p 'supermd-inline))
     (treesit-parser-create 'supermd)
@@ -354,7 +345,9 @@
     (treesit-major-mode-setup)))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.shtml\\'" . zine-superhtml-mode))
+(defun zine-override-auto-mode ()
+  "Makes zine-superhtml-mode the mode for '.shtml' files."
+  (add-to-list 'auto-mode-alist '("\\.shtml\\'" . zine-superhtml-mode)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.smd\\'" . zine-supermd-mode))
@@ -363,6 +356,5 @@
 
 ;; Local Variables:
 ;; coding: utf-8
-;; byte-compile-warnings: (not obsolete)
 ;; End:
 ;;; zine-mode.el ends here
